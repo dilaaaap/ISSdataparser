@@ -1,19 +1,14 @@
-FROM centos:7.9.2009
+FROM python:3.9
 
-RUN yum update -y
+RUN mkdir /app
+WORKDIR /app
+RUN pip install xmltodict
+RUN pip install wget
 
-RUN yum install -y python3
+COPY requirements.txt /app/requirements.txt
+RUN pip install -r /app/requirements.txt
+COPY . /app
 
-RUN pip3 install pytest==7.0.0
-
-RUN wget https://nasa-public-data.s3.amazonaws.com/iss-coords/2022-02-13/ISS_OEM/ISS.OEM_J2K_EPH.xml /code/ISS.OEM_J2K_EPH.xml
-
-RUN wget https://nasa-public-data.s3.amazonaws.com/iss-coords/2022-02-13/ISS_sightings/XMLsightingData_citiesUSA05.xml /code/XMLsightingData_citiesUSA05.xml
-
-COPY app.py /code/app.py
-
-RUN chmod +rx .code/app.py
-
-ENV PATH "/code:$PATH"
-
+ENTRYPOINT ["python"]
+CMD ["app.py"]
 
