@@ -2,10 +2,24 @@
 
 In this file we pull data for ground sighting and satellite location from NASA in an XML format.
 ## Description
-The system starts once the user makes a POST request, in this case with the command
+NASA has data posted on their website for the ISS satellite as well as data for Ground sightings, of satellites. 
+However, this data comes in an xml format, so for us to be able to read through the data to find out more with Python, we will have to make it more usable. In this file we use Docker  to make a containerized Flask app that will convert the xml data into dictionary data that we can iterate over to read specific data that we want out of and that will take GET requests to send the requester data that they want.
+
+## Running program
+* To run this file from the Dockerfile on Dockerhub, 
+1. download the image from this Dockerhub link:
+    [Dockerhub Image File](https://hub.docker.com/repository/docker/dilipyy/issdataparser)
+2. Once you have the file downloaded, run the docker image file with
 ```
-    curl -X POST localhost:5010/load
+docker run --name "ISSdataparser" -d -p 5010:5000 dilipyy/issdataparser:latest
 ```
+This will start the flask server in the background.
+
+3. Then you can call the flask server with various commands, such as,
+```
+curl -X POST localhost:5000/load
+```
+for the POST request or
 This POST request then initiates the file to pull the xml files from their respective locations using wget, which are then read into the file.
 
 ```
@@ -50,30 +64,23 @@ Following this, we are left with a dictionary full of dictionaries. However, we 
 ```
 Now that we have completed this, we have converted the xml files into datasets that are very compatible with the tools we have in Python, allowing us to complete the GET requests.
 
-## Running program
-
-* To run this file,build the docker image with:
-
+4. For examples of GET request input that this can take type:
 ```
-docker build -t dilipyy,flask-helloworld:latest .
+curl localhost:5000/help
 ```
-
+to get a list of GET request options.
+You will then see the output accordingly in the flask server terminal.
+* To run this file manually,build the docker image with:
+1. 
+```
+docker build -t dilipyy,issdataparser:latest .
+```
+2. 
 Then run the docker image with:
 ```
-docker run --name "ISSdataparser" 5010:5000 dilipyy/flask-helloworld:latest
+docker run --name "ISSdataparser" -d -p 5010:5000 dilipyy/issdataparser:latest
 ```
-
-To see the actual output of the flask server, we will also have to open a second terminal, this is because the flask servers print statements will not show if it is run in the background.
-
-Run the flask server from the docker image
-```
-flask run -p 5010
-```
-Then in the other terminal call the flask server with various commands, such as,
-```
-curl -X POST localhost:5010/load
-```
-You will then see the output accordingly in the flask server terminal.
+You can then proceed with the step 3 for running the file from the dockerhub file as it is effectively the same from here.
 
 ### Dependencies
 
