@@ -1,19 +1,9 @@
 NAME ?= dilipyy
 
-all: 
-	build run push
+all: build
 
-images:
-	docker images | grep ${NAME}
+build:    docker build -t dilipyy/issdataparser:latest .
 
-ps:
-	docker ps -a | grep ${NAME}
+run: docker run --name "ISSdataparser" -d -p 5010:5000 $${NAME}/issdataparser:latest
 
-build:
-	docker build -t ${NAME}/issdataparser:1.0 .
-
-run:
-	docker run --rm -v \${PWD}:/data ${NAME}/issdataparser:1.0  ISSdataparser.py
-
-push: 
-	docker push ${NAME}/issdataparser.py:1.0
+push:     docker push $${NAME}/issdataparser:latest
